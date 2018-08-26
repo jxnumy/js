@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>滚动变化图片</title>
+  <style>
+    html, body {
+		margin: 0;
+		padding: 0;
+		height: 150%;
+    }
+	.header{
+		height:30%;
+		text-align:center
+	}
+	h2{
+		width: 1.5em;
+		margin: 0 auto;
+	}
+	#cas {
+	margin:0 auto;
+	display: block;
+    }
+  </style>
+</head>
+<body>
+	<div class='header'>
+		<h1>滚动变化图片</h1>
+		<h2>拖动滚动条看看效果</h2>
+	</div>
+	<canvas id="cas"></canvas>
+
+<script>
+  !function() {
+    var canvas = document.getElementById('cas'),
+	ctx = canvas.getContext('2d'),
+	img1=new Image(),
+	img2=new Image(),
+	w=canvas.width = 400,
+    h=canvas.height = 300;
+	img1.src='1.jpg';
+	img2.src='2.jpg';
+	
+	//加载img1
+	img1.onload=function (){
+			ctx.save();
+			ctx.beginPath()
+			ctx.drawImage(img1,0,0,w,h)
+			ctx.closePath();
+			ctx.restore();
+		}
+	//重新绘制img1	
+	function draw(){
+		ctx.save();
+		ctx.beginPath()
+		ctx.drawImage(img1,0,0,w,h)
+		ctx.closePath();
+		ctx.restore();
+	}
+	//绘制img2
+	function draw1(r){
+		ctx.save();
+		ctx.beginPath()
+		ctx.arc(0,0,r,0,2*Math.PI,0);
+		ctx.clip();
+		ctx.drawImage(img2,0,0,w,h)
+		ctx.closePath();
+		ctx.restore();
+	}
+	//滚动条事件
+    window.onscroll = function() {
+	  let y=window.scrollY, h=window.innerHeight, ct=cas.getBoundingClientRect().top;
+	  let start=h/2;
+	  if(ct<=start&&ct>-600){ 
+		  ctx.clearRect(0,0,w,h);
+		  draw();
+		  draw1(2*(start-ct));
+	  }else if(ct<=-600){
+		  ctx.clearRect(0,0,w,h);
+		  draw1(h);
+	  }else{
+		  ctx.clearRect(0,0,w,h);
+		  draw();
+	  }
+	 
+    };
+  }();
+</script>
+</body>
+</html>
