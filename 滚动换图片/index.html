@@ -12,7 +12,18 @@
     }
 	.header{
 		height:30%;
-		text-align:center
+		text-align:center;
+	}
+	#bg{
+		width:500px;
+		height:300px;
+		//position: absolute;
+		//background-position:center;
+		z-index:-1;
+	}
+	#img{
+		width:500px;
+		height:300px;
 	}
 	h2{
 		width: 1.5em;
@@ -26,18 +37,52 @@
 </head>
 <body>
 	<div class='header'>
+		<div id='bg'><img id='img' src='1.jpg' /></div>
 		<h1>滚动变化图片</h1>
 		<h2>拖动滚动条看看效果</h2>
+		
 	</div>
 	<canvas id="cas"></canvas>
 
 <script>
+
+
   !function() {
+  var len=7,i=0;
+      var RAF = (function() {
+      return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback) {
+            window.setTimeout(callback, 1000 / 60);
+          };
+    })();
+	
+	function show(i){
+		console.log(i);
+		let o=100;
+		h=(i<len)?i+1:1;
+		function animate(){
+			bg=document.querySelector('#bg')
+			bg.innerHTML='';
+			bg.style.backgroundImage=`url(${i}.jpg)`;
+			bg.style.opacity=o/100;
+			if(o>0){
+				o-=1
+			}else{
+				o+=1
+			}
+			RAF(animate)
+		}
+		animate();
+	}
+
+	window.setInterval(function(){
+		show(i%len+1);
+		i++
+		},5000)
     var canvas = document.getElementById('cas'),
 	ctx = canvas.getContext('2d'),
 	img1=new Image(),
 	img2=new Image(),
-	w=canvas.width = 400,
+	w=canvas.width = 500,
     h=canvas.height = 300;
 	img1.src='1.jpg';
 	img2.src='2.jpg';
